@@ -78,7 +78,53 @@ def Parser(request):
             else:
                 return HttpResponse("No such record")
             
-            
+        if request.method == "GET_GENRE": #maybe done
+            response = Genre.objects.values()
+            print(response)
+
+        if request.method == "GREATE_GENRE": #maybe done
+            response = []
+        
+            genre_record = GenreModel(data=parsed_data)
+            if genre_record.is_valid():
+                genre_record.save()
+                print(genre_record)
+                return HttpResponse("Record complete.")
+            else:
+                return HttpResponse("No valid data") 
+
+        if request.method == "DELETE_GENRE": #maybe done
+            response = []
+            genre_record = Genre.objects.get(name=parsed_data["name"])
+            if genre_record:
+                genre_record.delete()
+                return HttpResponse("Record deleted.")
+            else:
+                return HttpResponse("No such record")
+
+        if request.method == "GET_AUTHOR":  #maybe done
+            response = Author.objects.values()
+            print(response)
+
+        if request.method == "GREATE_AUTHOR": #maybe done
+            response = []
+
+            author_record = AuthorModel(data=parsed_data)
+            if author_record.is_valid():
+                author_record.save()
+                print(author_record)
+                return HttpResponse("Record complete.")
+            else:
+                return HttpResponse("No valid data") 
+
+        if request.method == "DELETE_AUTHOR": #maybe done
+            response = []
+            author_record = Author.objects.get(name=parsed_data["name"])
+            if author_record:
+                author_record.delete()
+                return HttpResponse("Record deleted.")
+            else:
+                return HttpResponse("No such record")
             
             
         # if request.method == 'GET_OLT':

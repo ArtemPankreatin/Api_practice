@@ -41,12 +41,12 @@ class BookModel(forms.ModelForm):
     }
     """
 
-class AuthorSerializer(serializers.ModelSerializer):
+class AuthorModel(forms.ModelForm):
     class Meta:
         model = Author
         fields = ('name')
 
-class GenreSerializer(serializers.ModelSerializer):
+class GenreModel(forms.ModelForm):
     class Meta:
         model = Genre
         fields = ('name')
