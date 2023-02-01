@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django import forms
 
 from .models import User, Book, Author, Genre
+from django.contrib.auth.hashers import make_password
 
 
 class UserModel(forms.ModelForm):

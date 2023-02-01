@@ -17,8 +17,10 @@ from django.contrib import admin
 from django.urls import path
 from django.urls import re_path
 from testdb.views import Parser
+from testdb.auth import Auth
 
 urlpatterns = [
     re_path('admin/', admin.site.urls),
-    re_path(r'^parser$', Parser)
+    re_path(r'^parser$', Parser),
+    re_path(r'^auth$', Auth)
 ]

@@ -19,25 +19,25 @@ def Parser(request):
 
         if request.method == 'GET_USER':                  #done
             response = User.objects.values()
-            for record in response:
-                record.pop("id")
-                record.pop("last_login")
-                record.pop("password")
             if response.__len__() == 0:
                 return HttpResponse("Empty table.")
             else:
+                for record in response:
+                    record.pop("id")
+                    record.pop("last_login")
+                    # record.pop("password")
                 return HttpResponse(response)
+            
         if request.method == 'CREATE_USER':                #done
             parsed_data["list_of_favorite_books"] = [str(i) for i in parsed_data["list_of_favorite_books"].split(",")]
             response = []
             user_record = UserModel(data=parsed_data)
-            print(user_record)
             if user_record.is_valid():
-                print(user_record.cleaned_data)
-                user_record.save()
+                user_record.create(user_record.cleaned_data)
                 return HttpResponse("Record created.")
             else:
-                return HttpResponse("Not valid data")
+                return HttpResponse("Not valid data or this user already exists.")
+            
         if request.method == 'DELETE_USER':                 #done
             response = []
             user_record = User.objects.get(email=parsed_data["email"])
@@ -49,25 +49,26 @@ def Parser(request):
             
         if request.method == 'GET_BOOKS': #done
             response = Book.objects.values()
-            
-            # for record in response:
-            #     record.pop("id")
-            #     record.pop("last_login")
-            #     record.pop("password")
-            return HttpResponse(response)
+            if response.__len__() == 0:
+                return HttpResponse("Empty table.")
+            else:
+                for record in response:
+                    record.pop("id")
+                    record.pop("last_login")
+                    record.pop("password")
+                return HttpResponse(response)
+        
         if request.method == 'CREATE_BOOKS': #done
-            
             response = []
             date_book = [int(i) for i in parsed_data['date_of_issue'].split('.')] 
             date_book.reverse()
             parsed_data['date_of_issue'] = date(date_book[0],date_book[1],date_book[2])
             book_record = BookModel(data=parsed_data)
-            print(parsed_data)
             if book_record.is_valid():
                 book_record.save()
                 return HttpResponse("Record created.")
             else:
-                return HttpResponse("Not valid data")
+                return HttpResponse("Not valid data or this book already exists.")
         if request.method == 'DELETE_BOOK': #done
             response = []
             book_record = Book.objects.get(name=parsed_data["name"])

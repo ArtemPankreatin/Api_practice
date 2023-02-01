@@ -1,7 +1,10 @@
 from django.contrib.auth.models import AbstractBaseUser
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
-
+import jwt
+import secrets
+from Api.settings import SECRET_KEY
+from datetime import *
 
 class User(AbstractBaseUser):
     class Role(models.TextChoices):
@@ -14,6 +17,21 @@ class User(AbstractBaseUser):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
+
+    @property
+    def token(self):
+        return self._generate_jwt_token()
+
+    def _generate_jwt_token(self):
+        token = jwt.encode({
+            'salt': secrets.token_urlsafe(32),
+            'creation_date': datetime.today().strftime("%x"),
+            'login': self.email,
+            'password': self.password
+        }, SECRET_KEY, algorithm='HS256')
+        return token
+
+    
 
 class Book(AbstractBaseUser):
     name = models.CharField(max_length=50, unique=True)
